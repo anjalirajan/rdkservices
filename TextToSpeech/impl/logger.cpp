@@ -45,12 +45,19 @@ namespace TTS {
         return prettyFunction.substr(begin,end).c_str();
     }
 
+    static int gLogLevel = INFO_LEVEL;
+
 #ifdef USE_RDK_LOGGER
 
     void logger_init()
     {
         sync_stdout();
         TTS_logger_init("/etc/debug.ini");
+    }
+
+    int getLogLevel()
+    {
+        return gLogLevel;
     }
 
     void log(LogLevel level,
@@ -60,6 +67,8 @@ namespace TTS {
             int, // thread id is already handled by TTS_logger
             const char* format, ...)
     {
+        gLogLevel = level;
+
         const TTS_LogLevel levelMap[] =
         {TTS_LOG_FATAL, TTS_LOG_ERROR, TTS_LOG_WARN, TTS_LOG_INFO, TTS_LOG_DEBUG, TTS_LOG_TRACE1};
 
@@ -100,8 +109,15 @@ namespace TTS {
     {
         sync_stdout();
         const char* level = getenv("TTS_DEFAULT_LOG_LEVEL");
-        if (level)
+        if (level) {
             gDefaultLogLevel = static_cast<LogLevel>(atoi(level));
+            gLogLevel = gDefaultLogLevel;
+        }
+    }
+
+    int getLogLevel()
+    {
+        return gLogLevel;
     }
 
     void log(LogLevel level,
@@ -113,6 +129,8 @@ namespace TTS {
     {
         if (gDefaultLogLevel < level)
             return;
+
+        gLogLevel = level;
 
         const char* levelMap[] = {"Fatal", "Error", "Warning", "Info", "Verbose", "Trace"};
         const short kFormatMessageSize = 4096;

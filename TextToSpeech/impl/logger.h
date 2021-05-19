@@ -53,6 +53,12 @@ void logger_init();
         TTSLOG_ERROR("%s", #expr); \
     } while (0)
 
+
+/**
+ * @brief returns the LogLevel
+ */
+int getLogLevel();
+
 /**
  * @brief Log a message
  * The function is defined by logging backend.

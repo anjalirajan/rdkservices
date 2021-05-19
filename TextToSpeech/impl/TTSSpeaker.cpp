@@ -818,7 +818,7 @@ std::string TTSSpeaker::constructURL(TTSConfiguration &config, SpeechData &d) {
     tts_request.append("&text=");
     tts_request.append(sanitizedString);
 
-    TTSLOG_WARNING("Constructured final URL is %s", tts_request.c_str());
+    TTSLOG_TRACE("Constructured final URL is %s", tts_request.c_str());
     return tts_request;
 }
 
